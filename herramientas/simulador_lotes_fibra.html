@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador de lotes de fibra</title>
+<style>
+:root{--bg:#fafaf8;--card:#fff;--soft:#f1efe8;--tx:#1f1f1d;--tx2:#5f5e5a;--bd:#d3d1c7;--acc:#185fa5;--okb:#eaf3de;--okt:#27500a;--nob:#fcebeb;--not:#791f1f;--err:#a32d2d}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1c1a;--card:#262624;--soft:#2c2c2a;--tx:#f1efe8;--tx2:#b4b2a9;--bd:#444441;--acc:#85b7eb;--okb:#173404;--okt:#c0dd97;--nob:#501313;--not:#f7c1c1;--err:#f09595}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+main{max-width:860px;margin:0 auto;padding:24px 16px}
+h1{font-size:22px;font-weight:500;margin:0 0 4px}
+.sub{color:var(--tx2);font-size:14px;margin:0 0 20px}
+textarea{width:100%;min-height:110px;font-family:ui-monospace,Consolas,monospace;font-size:13px;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);resize:vertical}
+.lb{font-size:13px;color:var(--tx2);margin:0 0 4px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:12px 0}
+.mc{background:var(--soft);border-radius:8px;padding:12px}.mc .k{font-size:12px;color:var(--tx2)}.mc .v{font-size:22px;font-weight:500}
+.cd{border:1px solid var(--bd);border-radius:12px;padding:10px 14px;background:var(--card);margin-bottom:8px}
+.pl{font-size:11px;padding:2px 8px;border-radius:8px}.ok{background:var(--okb);color:var(--okt)}.no{background:var(--nob);color:var(--not)}
+.rw{font-size:13px;color:var(--tx2)}
+.bar{height:8px;background:var(--soft);border-radius:4px;overflow:hidden}.bar>div{height:100%;background:var(--acc)}
+.lot{display:grid;grid-template-columns:80px 1fr 150px;gap:8px;align-items:center;font-size:13px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<main>
+<h1>Simulador de asignación de lotes de fibra</h1>
+<p class="sub">Despacha solo los enlaces que quedan completos. A cada tramo se le asigna el lote más corto que lo cubra por sí solo. Los enlaces se atienden en el orden en que se escriben.</p>
+<div class="g2">
+<div><p class="lb">Enlaces en orden de prioridad (nombre: tramos en m)</p><textarea id="en">Enlace A: 4000, 3800, 2200
+Enlace B: 2000
+Enlace C: 1500, 900</textarea></div>
+<div><p class="lb">Lotes disponibles del SKU (lote: metros)</p><textarea id="lo">L-2401: 4200
+L-2402: 4000
+L-2403: 2100
+L-2404: 3500
+L-2405: 1200</textarea></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin:12px 0">
+<label class="lb" style="margin:0" for="rs">Reserva técnica</label>
+<input type="range" id="rs" min="0" max="15" step="1" value="3" style="flex:1">
+<span id="rso" style="font-weight:500;min-width:40px">3 %</span>
+</div>
+<p id="err" style="font-size:13px;color:var(--err);margin:0"></p>
+<div id="met" class="g4"></div>
+<div id="out"></div>
+<p class="lb" style="margin-top:14px">Saldo por lote después del despacho</p>
+<div id="lots"></div>
+</main>
+<script>
+const $=id=>document.getElementById(id),f=n=>Math.round(n).toLocaleString('es-PE');
+function parse(t,isEn){const r=[];for(const l of t.split('\n')){if(!l.trim())continue;const i=l.indexOf(':');if(i<1)throw 'Falta ":" en la línea: '+l;const name=l.slice(0,i).trim();const nums=l.slice(i+1).split(',').map(x=>Number(x.trim()));if(!nums.length||nums.some(n=>!(n>0)))throw 'Metros no válidos en: '+l;if(!isEn&&nums.length>1)throw 'Un solo valor por lote: '+l;r.push({name,v:nums});}if(!r.length)throw isEn?'Ingresa al menos un enlace':'Ingresa al menos un lote';return r;}
+function run(){const rp=+$('rs').value;$('rso').textContent=rp+' %';let E,L;try{E=parse($('en').value,1);L=parse($('lo').value,0).map(x=>({id:x.name,cap:x.v[0],rem:x.v[0]}));$('err').textContent='';}catch(e){$('err').textContent=e;return;}
+let html='',okN=0,ext=0;
+for(const e of E){const snap=L.map(l=>l.rem),as=[];let fail=null;const tr=e.v.map((m,i)=>({i:i+1,m,need:Math.ceil(m*(1+rp/100))})).sort((a,b)=>b.need-a.need);
+for(const t of tr){let best=null;for(const l of L)if(l.rem>=t.need&&(!best||l.rem<best.rem))best=l;if(!best){fail=t;break;}best.rem-=t.need;as.push({t,l:best.id});}
+if(fail){L.forEach((l,k)=>l.rem=snap[k]);html+=`<div class="cd"><span style="font-weight:500">${e.name}</span> <span class="pl no">no se despacha</span><div class="rw">El tramo ${fail.i} necesita ${f(fail.need)} m y ningún lote lo cubre solo. El metraje queda libre para otros enlaces.</div></div>`;}
+else{okN++;const s=as.reduce((a,x)=>a+x.t.need,0);ext+=s;html+=`<div class="cd"><span style="font-weight:500">${e.name}</span> <span class="pl ok">completo</span> <span style="float:right;font-size:13px">${f(s)} m</span><div class="rw">${as.sort((a,b)=>a.t.i-b.t.i).map(x=>`Tramo ${x.t.i} (${f(x.t.m)} m + reserva = ${f(x.t.need)} m) ← ${x.l}`).join('<br>')}</div></div>`;}}
+const tot=L.reduce((a,l)=>a+l.cap,0),left=L.reduce((a,l)=>a+l.rem,0);
+$('met').innerHTML=`<div class="mc"><div class="k">Enlaces ejecutables</div><div class="v">${okN} / ${E.length}</div></div><div class="mc"><div class="k">Metros a extraer</div><div class="v">${f(ext)}</div></div><div class="mc"><div class="k">Stock total del SKU</div><div class="v">${f(tot)}</div></div><div class="mc"><div class="k">Saldo en lotes</div><div class="v">${f(left)}</div></div>`;
+$('out').innerHTML=html;
+$('lots').innerHTML=L.map(l=>{const u=(l.cap-l.rem)/l.cap*100;return `<div class="lot"><span>${l.id}</span><div class="bar"><div style="width:${u.toFixed(1)}%"></div></div><span class="rw">${f(l.rem)} de ${f(l.cap)} m</span></div>`}).join('');}
+['en','lo','rs'].forEach(i=>$(i).addEventListener('input',run));run();
+</script>
+</body>
+</html>

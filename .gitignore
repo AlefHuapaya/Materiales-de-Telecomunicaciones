@@ -1,0 +1,8 @@
+# Datos de la empresa: no subir
+datos/
+*.kmz
+*.kml
+*.xlsx
+*.xls
+*.csv
+~$*
