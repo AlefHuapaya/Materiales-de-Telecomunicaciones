@@ -4,6 +4,7 @@ Propuesta de mejora del flujo de solicitud, entrega, consumo y devolución de ma
 
 > Resumen comprimido. El detalle completo está en [docs/01_Analisis_Flujo_Materiales.md](docs/01_Analisis_Flujo_Materiales.md).
 > Presentación de avance (12 diapositivas): [docs/02_Presentacion_Avance_v1.pptx](docs/02_Presentacion_Avance_v1.pptx).
+> Cambios seguros en Oracle y desabastecimiento: [docs/03_Propuesta_Oracle_y_Desabastecimiento.md](docs/03_Propuesta_Oracle_y_Desabastecimiento.md).
 > Estado: **análisis y diseño (v1, 2026-10-05)**. Pendiente: recibir ejemplos de la asignación, el KMZ y el RPT para construir el prototipo.
 
 ---
@@ -26,6 +27,7 @@ Proceso aparte: **traspaso de material entre proyectos** (~2 semanas).
 | P5 | La contratista llega 2 o 3 días tarde | Cita confirmada 24 h antes. Si no llega, se libera el cupo. Ranking de cumplimiento y SLA en el contrato |
 | P6 | No se sabe cuánto material tiene cada contratista | Conciliación: `entregado − consumido (RPT) − devuelto ± transferencias`. Cierre técnico en 5 días, separado del pago. Subinventario por contratista |
 | P8 | Traspaso entre proyectos: ~2 semanas | Acceso de consulta a los proyectos de la gerencia. **Borrow/Payback** de Oracle. Matriz de dueños de proyecto. SLA de 48 a 72 h |
+| P10 | Se instala todo lo liberado por ingeniería y quedan ejecuciones sin material | **Cobertura y brecha por proyecto**: pedir la liberación adicional antes de quedarse sin material. Recuperar stock existente primero. Ver [doc 03](docs/03_Propuesta_Oracle_y_Desabastecimiento.md) |
 
 ### 🟡 Media
 | # | Problema | Propuesta clave |
@@ -88,6 +90,9 @@ ID de ruta (versión validada) ───┘         ▲          ◄── Stock
 
 ## Herramientas
 - [herramientas/simulador_lotes_fibra.html](herramientas/simulador_lotes_fibra.html): asigna lotes de un SKU a los tramos de cada enlace y despacha solo los enlaces que quedan completos. Se abre en el navegador.
+
+## Cambios en Oracle
+Vía A primero: todo lo posible sin modificar Oracle (solo lectura y proceso). Vía B después: cambios acotados, con regularización previa, fecha de corte, prueba en clon y piloto. Lo que está en proceso no se migra. Detalle en [doc 03](docs/03_Propuesta_Oracle_y_Desabastecimiento.md).
 
 ## Pendiente de confirmar
 - ¿Oracle EBS o Fusion? ¿Se pide como requisición o como orden de movimiento?
