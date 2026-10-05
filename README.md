@@ -3,6 +3,7 @@
 Propuesta de mejora del flujo de solicitud, entrega, consumo y devolución de materiales (cable de fibra, antenas, RRU, BBU, SFP, ODF, mufas) gestionados en Oracle y ejecutados por contratistas.
 
 > Resumen comprimido. El detalle completo está en [docs/01_Analisis_Flujo_Materiales.md](docs/01_Analisis_Flujo_Materiales.md).
+> Presentación de avance (12 diapositivas): [docs/02_Presentacion_Avance_v1.pptx](docs/02_Presentacion_Avance_v1.pptx).
 > Estado: **análisis y diseño (v1, 2026-10-05)**. Pendiente: recibir ejemplos de la asignación, el KMZ y el RPT para construir el prototipo.
 
 ---
