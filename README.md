@@ -28,6 +28,7 @@ Proceso aparte: **traspaso de material entre proyectos** (~2 semanas).
 | P6 | No se sabe cuánto material tiene cada contratista | Conciliación: `entregado − consumido (RPT) − devuelto ± transferencias`. Cierre técnico en 5 días, separado del pago. Subinventario por contratista |
 | P8 | Traspaso entre proyectos: ~2 semanas | Acceso de consulta a los proyectos de la gerencia. **Borrow/Payback** de Oracle. Matriz de dueños de proyecto. SLA de 48 a 72 h |
 | P10 | Se instala todo lo liberado por ingeniería y quedan ejecuciones sin material | **Cobertura y brecha por proyecto**: pedir la liberación adicional antes de quedarse sin material. Recuperar stock existente primero. Ver [doc 03](docs/03_Propuesta_Oracle_y_Desabastecimiento.md) |
+| P11 | Los coordinadores no tienen acceso a todos los proyectos ni a todas las tareas: hay stock que no ven | Tablero con 3 niveles de saldo (mis accesos / otras tareas de mis proyectos / otros proyectos), matriz de accesos y acceso de consulta. Ver [doc 03](docs/03_Propuesta_Oracle_y_Desabastecimiento.md) |
 
 ### 🟡 Media
 | # | Problema | Propuesta clave |

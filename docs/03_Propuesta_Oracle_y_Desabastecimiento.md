@@ -80,6 +80,30 @@
 |---|---|---|---|
 | **O. Liberaciones y cobertura** | Proyecto, material, liberado, entregado, comprometido, saldo libre, necesidad pendiente, brecha, consumo semanal, cobertura, fecha de la última solicitud de liberación | Semanal | Ingeniería + B + C + E + J |
 
+### P11 🔴 Accesos por proyecto y por tarea: stock que existe pero el coordinador no ve
+
+**Situación:** no todos los coordinadores tienen acceso a todos los proyectos ni a todas las **tareas** de un proyecto (1-1, 1-1-1, 1-1-2…). A veces un coordinador solo ve una. En el stock real revisado, todo el cable nuevo de un tipo estaba en una sola tarea: un coordinador con acceso a otra tarea del **mismo proyecto** veía cero.
+
+**Propuesta:**
+1. **Tres niveles de saldo en el tablero:**
+   1. lo que **puedo pedir** con mis accesos
+   2. lo que hay **en mis proyectos, en tareas sin acceso**: se coordina con quien tiene acceso
+   3. lo que hay **en otros proyectos**: requiere traspaso (P8)
+2. **Matriz de accesos** (archivo P): usuario × proyecto × tarea. Sirve para saber a quién pedir el material y para sustentar un pedido de acceso.
+3. **En Oracle:** acceso de **consulta** a todas las tareas de los proyectos de la gerencia. Es un cambio 🟢 sin riesgo, porque ver no es lo mismo que poder pedir.
+4. **Antes de pedir una liberación nueva (P10), revisar los niveles 2 y 3.**
+
+### Reglas confirmadas del stock
+- **"Disponible" no es "utilizable":** el exporte marca como disponible incluso el material de proyectos de baja. El tablero los excluye y muestra el material usado aparte.
+- **Subinventarios de solicitud (D0001, D0003):** no se combinan en una misma solicitud, así que el saldo se muestra por separado.
+- **SKUs equivalentes:** cables de distintos fabricantes con los mismos hilos y vano sí se pueden usar indistintamente. Se suman por grupo genérico (archivo L).
+- **Lote ≠ bobina:** el lote corresponde al ingreso al almacén y no existe el dato de cada bobina. Propuesta sin tocar Oracle: un **registro de bobinas** en el almacén (lote, número de bobina, metraje de etiqueta, metraje actual). Mientras no exista, el simulador usa la línea del exporte como unidad.
+
+| Archivo nuevo | Contenido clave | Frecuencia | Fuente |
+|---|---|---|---|
+| **P. Matriz de accesos** | Usuario, proyecto, tarea (o "todas"), tipo de acceso (consulta / solicitud) | Mensual o por cambio | TI / coordinadores |
+| **Q. Registro de bobinas** | Lote, número de bobina, metraje de etiqueta, metraje actual, ubicación | Por ingreso y despacho | Almacén |
+
 ---
 
 ## 3. Vía A: mejorar sin modificar Oracle
