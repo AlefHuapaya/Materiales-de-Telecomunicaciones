@@ -85,6 +85,9 @@ ID de ruta (versión validada) ───┘         ▲          ◄── Stock
 | Configuración de Oracle | 1–3 meses | Rol Preparador, backorder, reservas, acceso de consulta, control de lotes y lote divisible | Sí |
 | Estructural | 3–6 meses | Subinventario por contratista, motor de solicitud masiva, carga por interfaz, Borrow/Payback, SLA en contratos | Sí, más Legal y Compras |
 
+## Control de tickets de salida a sitio (nuevo, 2026-10-11)
+Control por **enlace** de los tickets Jira de salida a sitio: cuáles faltan (plazo de 7 días desde la activación), de quién es el pendiente (contratista, nosotros o Mira Group) y si el material instalado cuadra con el asignado. Detalle en [docs/02_Control_Tickets_Salida_Sitio.md](docs/02_Control_Tickets_Salida_Sitio.md).
+
 ## Herramientas
 - [herramientas/simulador_lotes_fibra.html](herramientas/simulador_lotes_fibra.html): asigna lotes de un SKU a los tramos de cada enlace y despacha solo los enlaces que quedan completos. Se abre en el navegador.
 
